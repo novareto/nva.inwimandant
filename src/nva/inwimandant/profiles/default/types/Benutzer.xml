@@ -1,38 +1,30 @@
 <?xml version="1.0"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    name="Benutzerordner"
+    name="Benutzer"
     meta_type="Dexterity FTI"
     i18n:domain="nva.inwimandant">
 
   <!-- Basic properties -->
   <property
       i18n:translate=""
-      name="title">Benutzerordner</property>
+      name="title">Benutzer</property>
   <property
       i18n:translate=""
-      name="description">Ordner zur Speicherung von Benutzern fuer den INWI-Mandanten</property>
+      name="description">Benutzer fuer INWI-Mandant</property>
 
   <property name="allow_discussion">False</property>
-  <property name="factory">Benutzerordner</property>
+  <property name="factory">Benutzer</property>
   <property name="icon_expr"></property>
   <property name="link_target"></property>
 
   <!-- Hierarchy control -->
-  <property name="global_allow">True</property>
-  <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-    <element value="Benutzer" />
-      <!--
-    <element value="Document" />
-    <element value="File" />
-  -->
-  </property>
+  <property name="global_allow">False</property>
   <!-- Schema, class and security -->
-  <property name="add_permission">nva.inwimandant.AddBenutzerordner</property>
-  <property name="klass">nva.inwimandant.content.benutzerordner.Benutzerordner</property>
+  <property name="add_permission">nva.inwimandant.AddBenutzer</property>
+  <property name="klass">nva.inwimandant.content.benutzer.Benutzer</property>
   <property name="model_file"></property>
   <property name="model_source"></property>
-  <property name="schema">nva.inwimandant.content.benutzerordner.IBenutzerordner</property>
+  <property name="schema">nva.inwimandant.content.benutzer.IBenutzer</property>
 
   <!-- Enabled behaviors -->
   <property name="behaviors" purge="false">
@@ -54,14 +46,10 @@
     <!--<element value="plone.richtext"/>-->
     <!--<element value="plone.tableofcontents"/>-->
     <!--<element value="plone.versionable" />-->
-    <!--<element value="plone.nextprevioustoggle" />-->
-    <!--<element value="plone.nextpreviousenabled" />-->
-    <!--<element value="plone.navigationroot" />-->
-    <!--<element value="plone.selectablecontrainstypes" />-->
   </property>
 
   <!-- View information -->
-  <property name="add_view_expr">string:${folder_url}/++add++Benutzerordner</property>
+  <property name="add_view_expr">string:${folder_url}/++add++Benutzer</property>
   <property name="default_view">view</property>
   <property name="default_view_fallback">False</property>
   <property name="immediate_view">view</property>

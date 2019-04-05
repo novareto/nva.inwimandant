@@ -3,6 +3,14 @@
   <permissions>
   <!-- -*- extra stuff goes here -*- -->
 
+    <permission name="nva.inwimandant: Add Benutzer" acquire="True">
+      <role name="Manager"/>
+      <role name="Site Administrator"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
+    </permission>
+
+
     <permission name="nva.inwimandant: Add Benutzerordner" acquire="True">
       <role name="Manager"/>
       <role name="Site Administrator"/>
