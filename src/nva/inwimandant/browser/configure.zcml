@@ -18,4 +18,20 @@
       directory="static"
       />
 
+  <browser:page
+      name="view"
+      for="nva.inwimandant.content.benutzerordner.IBenutzerordner"
+      class="nva.inwimandant.browser.views.BenutzerOrdnerView"
+      template="templates/benutzerordnerview.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="view"
+      for="nva.inwimandant.content.benutzer.IBenutzer"
+      class="nva.inwimandant.browser.views.BenutzerView"
+      template="templates/benutzerview.pt"
+      permission="zope2.View"
+      />
+
 </configure>

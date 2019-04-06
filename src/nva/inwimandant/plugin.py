@@ -71,8 +71,10 @@ class InwiMandant(BasePlugin, Cacheable):
                 mydict = {}
                 mydict['fullname'] = logged.title
                 mydict['email'] = logged.email
-                mydict['location'] = logged.location
-                mydict['description'] = logged.biography
+                if logged.location:
+                    mydict['location'] = logged.location
+                if logged.biography:
+                    mydict['description'] = logged.biography
                 return mydict
         return dict() 
         

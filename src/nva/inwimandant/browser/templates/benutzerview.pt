@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="example.conference">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <div class="row">
+          <div class="col-xs-8 col-md-8">
+            <h1 class="documentFirstHeading" tal:content="context/title" />
+          </div>
+          <div tal:condition="view/get_portrait" class="col-xs-4 col-md-4">
+            <img tal:attributes="src view/get_portrait">
+          </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription" tal:content="context/description" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <div class="row">
+          <div class="col-xs-6 col-md-3"><strong>Anmeldename</strong></div>
+          <div class="col-xs-6 col-md-9"><span tal:content="context/user_id"></span></div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6 col-md-3"><strong>E-Mail-Adresse</strong></div>
+          <div class="col-xs-6 col-md-9"><span tal:content="context/email"></span></div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6 col-md-3"><strong>Dienstort oder Dienstsitz</strong></div>
+          <div class="col-xs-6 col-md-9"><span tal:content="context/location"></span></div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6 col-md-3"><strong>Passwort</strong></div>
+          <div class="col-xs-6 col-md-9"><span tal:content="view/get_password"></span></div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-md-12"><strong>Biographie</strong></div>
+          <div class="col-xs-12 col-md-12"><span tal:content="context/biography"></span></div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

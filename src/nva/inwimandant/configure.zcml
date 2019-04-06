@@ -49,4 +49,12 @@
   <adapter name="mandant_userid" factory="nva.inwimandant.content.benutzer.mandant_userid" />
   <adapter name="mandant_email" factory="nva.inwimandant.content.benutzer.mandant_email" />
 
+  <subscriber
+    for="nva.inwimandant.content.benutzer.IBenutzer
+         zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+    handler="nva.inwimandant.content.benutzer.raiseUserErrorIfDouble"
+  />
+
+  <!--<adapter factory="nva.inwimandant.content.benutzer.UserValidator" />-->
+
 </configure>

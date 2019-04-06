@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="example.conference">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription" tal:content="context/description" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <div class="row">
+          <div class="col-xs-12 col-md-12">
+            <h4>Benutzer für Gruppe: <span tal:content="view/get_group"/></h4>
+          </div>
+        </div>
+
+        <div tal:define="myuserlist view/get_userlist">
+          <div class="row">
+            <div class="col-xs-6 col-md-3"><strong>Benutzer</strong></div>
+            <div class="col-xs-6 col-md-9"><strong>Anmeldename</strong></div>
+          </div>
+          <hr>
+          <div class="row" tal:repeat="user myuserlist">
+            <div class="col-xs-6 col-md-3">
+              <a href="" tal:attributes="href user/url" tal:content="user/titel"/>
+            </div>
+            <div class="col-xs-6 col-md-9">
+              <p tal:content="user/username"/>
+            </div>
+          </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
