@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
 <object name="portal_catalog">
-  <!--<column value="my_meta_column"/>-->
+ <index name="mandant_userid" meta_type="FieldIndex">
+  <indexed_attr value="mandant_userid"/>
+ </index>
+ <index name="mandant_email" meta_type="FieldIndex">
+  <indexed_attr value="mandant_email"/>
+ </index>
+ <column value="mandant_userid"/>
 </object>

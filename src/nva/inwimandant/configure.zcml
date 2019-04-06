@@ -46,4 +46,7 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <adapter name="mandant_userid" factory="nva.inwimandant.content.benutzer.mandant_userid" />
+  <adapter name="mandant_email" factory="nva.inwimandant.content.benutzer.mandant_email" />
+
 </configure>

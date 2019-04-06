@@ -3,12 +3,10 @@
 # lwalther@novareto.de
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
-
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from OFS.Folder import Folder
 from OFS.Cache import Cacheable
-
 from Products.PluggableAuthService.interfaces.plugins import \
     IAuthenticationPlugin, IUserEnumerationPlugin, IGroupsPlugin
 
@@ -49,9 +47,7 @@ class InwiMandant(BasePlugin, Cacheable):
         password = credentials.get( 'password' )
         if login is None or password is None:
             return None
-        user = ploneapi.content.find(portal_type='Benutzer', id=login)
-        print 'hier' * 9
-        print user
+        user = ploneapi.content.find(portal_type='Benutzer', mandant_userid=login)
         if not user:
             return None
         logged = user[0].getObject()
@@ -59,6 +55,7 @@ class InwiMandant(BasePlugin, Cacheable):
             return (login, login)
         return None
 
+    security.declarePrivate('getRolesForPrincipal')
     def getRolesForPrincipal( self, principal, request=None ):
         if not request:
             return ()
@@ -68,12 +65,14 @@ class InwiMandant(BasePlugin, Cacheable):
     def getPropertiesForUser(self, user, request=None):
         if user:
             userid = user.getUserId()
-            userbrains = ploneapi.content.find(portal_type='Benutzer', id=userid)
+            userbrains = ploneapi.content.find(portal_type='Benutzer', mandant_userid=userid)
             if userbrains:
                 logged = userbrains[0].getObject()
                 mydict = {}
                 mydict['fullname'] = logged.title
                 mydict['email'] = logged.email
+                mydict['location'] = logged.location
+                mydict['description'] = logged.biography
                 return mydict
         return dict() 
         
@@ -85,20 +84,31 @@ class InwiMandant(BasePlugin, Cacheable):
 
         mylist = []
         if key:
-            users = ploneapi.content.find(portal_type='Benutzer', id=key)
+            users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=key)
             for i in users:
 	        mylist.append({
-                               "id" : i.id,
-                               "login" : i.id,
+                               "id" : i.mandant_userid,
+                               "login" : i.mandant_userid,
                                "pluginid" : self.getId(),
                               })
         if kw.get('fullname'):
             users = ploneapi.content.find(portal_type='Benutzer', Title=kw.get('fullname'))
-            print users
             for i in users:
-                print i.id
-                mylist.append({"id": i.id,
-                               "login": i.id,
+                mylist.append({"id": i.mandant_userid,
+                               "login": i.mandant_userid,
+                               "pluginid" : self.getId(),})
+
+        elif kw.get('email'):
+            users = ploneapi.content.find(portal_type='Benutzer', mandant_email=kw.get('email'))
+            for i in users:
+                mylist.append({"id": i.mandant_userid,
+                               "login": i.mandant_userid,
+                               "pluginid" : self.getId(),})
+        elif kw.get('name'):
+            users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=kw.get('name'))
+            for i in users:
+                mylist.append({"id": i.mandant_userid,
+                               "login": i.mandant_userid,
                                "pluginid" : self.getId(),})
         return mylist
 	
@@ -106,8 +116,15 @@ class InwiMandant(BasePlugin, Cacheable):
     def getGroupsForPrincipal(self, principal, request=None, attr=None):
         if not request:
             return ()
-
-
+        if not principal:
+            return ()
+        if principal:
+            users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=principal.getUserId())
+            if users:
+                userobj = users[0].getObject()
+                return (userobj.aq_parent.group,)
+        return ()
+            
     def extractCredentials(self, request):
         return 
 
