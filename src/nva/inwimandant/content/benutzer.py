@@ -6,9 +6,21 @@ from plone.supermodel import model
 from zope import schema
 from zope.interface import implementer
 from plone.indexer.decorator import indexer
-
+from plone import api as ploneapi
+from zope.interface import Invalid
 
 # from nva.inwimandant import _
+
+def user_constraint(value):
+    """Check if a User already exists
+    """
+    users = ploneapi.content.find(portal_type="Benutzer", mandant_userid=value)
+    if users:
+        raise Invalid(u'Der Anmeldename ist bereits vorhanden. Bitte wählen Sie einen anderen Anmeldenamen')
+    other = ploneapi.user.get(username=value)
+    if other:
+        raise Invalid(u'Der Anmeldename ist bereits vorhanden. Bitte wählen Sie einen anderen Anmeldenamen')
+    return True
 
 
 class IBenutzer(model.Schema):
@@ -16,7 +28,7 @@ class IBenutzer(model.Schema):
 
     title = schema.TextLine(title=u'Vollständiger Name', required=True)
 
-    user_id = schema.TextLine(title=u'Anmeldename', required=True)
+    user_id = schema.TextLine(title=u'Anmeldename', constraint=user_constraint, required=True)
 
     email = schema.TextLine(title=u'E-Mail-Adresse', required=True)
 

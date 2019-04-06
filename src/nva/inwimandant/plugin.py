@@ -55,11 +55,11 @@ class InwiMandant(BasePlugin, Cacheable):
             return (login, login)
         return None
 
-    security.declarePrivate('getRolesForPrincipal')
-    def getRolesForPrincipal( self, principal, request=None ):
-        if not request:
-            return ()
-        return ['Member',]
+#    security.declarePrivate('getRolesForPrincipal')
+#    def getRolesForPrincipal( self, principal, request=None ):
+#        if not request:
+#            return ()
+#        return ['Member',]
 
     security.declarePrivate('getPropertiesForUser')
     def getPropertiesForUser(self, user, request=None):
@@ -125,8 +125,8 @@ class InwiMandant(BasePlugin, Cacheable):
                 return (userobj.aq_parent.group,)
         return ()
             
-    def extractCredentials(self, request):
-        return 
+#    def extractCredentials(self, request):
+#        return 
 
 classImplements(InwiMandant, interfaces.IInwiMandant)
 InitializeClass(InwiMandant)
