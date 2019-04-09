@@ -17,18 +17,13 @@ from z3c.form import validator
 def raiseUserErrorIfDouble(obj, event):
     """Check if a User already exists
     """
-    try:
-        other = ploneapi.user.get(username=obj.user_id)
-    except:
-        import pdb;pdb.set_trace()
+    other = ploneapi.user.get(username=obj.user_id)
     count = 0
+    newid = obj.user_id
     while other:
         count = count + 1
         newid = "%s-%s" %(obj.user_id, count)
-        try:
-            other = ploneapi.user.get(username=newid)
-        except:
-            import pdb;pdb.set_trace()
+        other = ploneapi.user.get(username=newid)
     obj.user_id = newid
     return
 
