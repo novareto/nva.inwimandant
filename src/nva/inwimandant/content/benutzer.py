@@ -48,13 +48,19 @@ class IBenutzer(model.Schema):
 
     title = schema.TextLine(title=u'Vollständiger Name', required=True)
 
-    user_id = schema.TextLine(title=u'Anmeldename', required=True)
+    user_id = schema.TextLine(title=u'Anmeldename', 
+                              description=u"Die Nutzung der E-Mail-Adresse oder einer eindeutigen, trägerindividuellen Benutzerkennung\
+                                            wird empfohlen.",
+                              required=True)
 
     email = schema.TextLine(title=u'E-Mail-Adresse', constraint=email_constraint, required=True)
 
     location = schema.TextLine(title=u"Dienstort oder Dienstsitz", required=False)
 
-    password = schema.TextLine(title=u'Passwort', constraint=passwort_constraint, required=True)
+    password = schema.TextLine(title=u'Passwort', 
+                               description=u"Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe und eine Zahl müssen enthalten\
+                               sein.", 
+                               constraint=passwort_constraint, required=True)
 
     password_repeat = schema.TextLine(title=u'Passwort wiederholen', required=True)
 

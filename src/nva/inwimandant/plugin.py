@@ -121,10 +121,13 @@ class InwiMandant(BasePlugin, Cacheable):
         if not principal:
             return ()
         if principal:
-            users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=principal.getUserId())
-            if users:
-                userobj = users[0].getObject()
-                return (userobj.aq_parent.group,)
+            try:
+                users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=principal.getUserId())
+                if users:
+                    userobj = users[0].getObject()
+                    return (userobj.aq_parent.group,)
+            except:
+                return ()
         return ()
             
 #    def extractCredentials(self, request):
