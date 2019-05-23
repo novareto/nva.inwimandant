@@ -44,6 +44,11 @@ def email_constraint(value):
         raise Invalid(u'Bitte prüfen Sie die eingegebene E-Mail-Adresse.')
     return True
 
+def userid_constraint(value):
+    user = ploneapi.user.get(userid=value)
+    if user:
+        raise Invalid(u"Die Benutzerid wurde bereits vergeben.")
+    return True
 
 class IBenutzer(model.Schema):
     """ Content-Type Interface fuer den INWI-Benutzer """
@@ -53,6 +58,7 @@ class IBenutzer(model.Schema):
     user_id = schema.TextLine(title=u'Anmeldename', 
                               description=u"Die Nutzung der E-Mail-Adresse oder einer eindeutigen, trägerindividuellen Benutzerkennung\
                                             wird empfohlen.",
+                              constraint = userid_constraint,
                               required=True)
 
     email = schema.TextLine(title=u'E-Mail-Adresse', constraint=email_constraint, required=True)

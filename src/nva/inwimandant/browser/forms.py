@@ -16,6 +16,12 @@ class ChangePasswordForm(api.Form):
             return True
         if self.context.aq_inner.aq_parent.getOwner().getId() == userid:
             return True
+        if self.context.aq_inner.aq_parent.Creator() == userid:
+            if "Editor" in ploneapi.user.get_roles(username=userid, obj=self.context):
+                return True
+        if userid in self.context.aq_inner.aq_parent.Contributors():
+            if "Editor" in ploneapi.user.get_roles(username=userid, obj=self.context):
+                return True
         return False
 
     def update(self):

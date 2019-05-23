@@ -2,6 +2,7 @@ from zope.interface import Interface
 from Acquisition import aq_inner
 from plone import api as ploneapi
 from Products.Five import BrowserView
+from Products.CMFCore.utils import getToolByName
 from nva.inwimandant.vocabularies import possible_groups
 from uvc.api import api
 
@@ -28,11 +29,17 @@ class BenutzerOrdnerView(BrowserView):
     def changelink(self, entryurl):
         link = ''
         current = ploneapi.user.get_current()
-        if self.context.getOwner().getId() == current.getId():
+        userid = current.getId()
+        if self.context.getOwner().getId() == userid:
             link = entryurl + '/@@changepasswordform'
+        if self.context.Creator() == userid:
+            if "Editor" in ploneapi.user.get_roles(username=userid, obj=self.context):
+                link = entryurl + '/@@changepasswordform'
+        if current.getId() in self.context.Contributors():
+            if "Editor" in ploneapi.user.get_roles(username=userid, obj=self.context):
+                link = entryurl + '/@@changepasswordform'
         return link
  
-
 class BenutzerView(BrowserView):
     """View fuer den Benutzer"""
 
@@ -70,7 +77,29 @@ class IsMandantUser(api.View):
             return True
         return False
 
-class isFolderOwner(api.View):
+
+class IsLocalUser(api.View):
+    api.context(Interface)
+
+    def render(self):
+        userid = ploneapi.user.get_current().getId()
+        acl_users = getToolByName(self.context, 'acl_users')
+        source_users = acl_users.get('source_users')
+        userids = [i.getId() for i in source_users.getUsers()]
+        if userid in userids:
+            return True
+        return False
+
+
+class IsExternalLogin(api.View):
+    api.context(Interface)
+
+    def render(self):
+        if "https://inwi-rue.bghw.de" in self.request.getURL():
+            return True
+        return False
+
+class IsMandantTest(api.View):
     api.context(Interface)
 
     def render(self):
