@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """Module where all interfaces, events and exceptions live."""
+from zope.interface import Interface
+from nva.inwimandant.content.benutzer import passwort_constraint
 from Products.PluggableAuthService import interfaces
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.interface import invariant
+from zope import schema
 
 
 class INvaInwimandantLayer(IDefaultBrowserLayer):
@@ -12,3 +16,18 @@ class IInwiMandant(interfaces.plugins.IAuthenticationPlugin,
                    interfaces.plugins.IGroupsPlugin,
                    interfaces.plugins.IUserEnumerationPlugin):
     """interface for InwiGroupHelper."""
+
+class IChangePassword(Interface):
+    """Form Fields for Change Password Form"""
+
+    password = schema.Password(title=u'Passwort',
+                               description=u"Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe und eine Zahl müssen enthalten\
+                               sein.",
+                               constraint=passwort_constraint, required=True)
+
+    password_repeat = schema.Password(title=u'Passwort wiederholen', required=True)
+
+    @invariant
+    def password_invariant(data):
+        if data.password != data.password_repeat:
+            raise Invalid(u"Die eingegebenen Passworte stimmen leider nicht überein.")

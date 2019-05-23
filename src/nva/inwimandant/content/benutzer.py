@@ -4,6 +4,8 @@ from plone.app.textfield import RichText
 from plone.namedfile.field import NamedBlobImage
 from plone.dexterity.content import Item
 from plone.supermodel import model
+from z3c.form.interfaces import IEditForm
+from plone.directives import form
 from zope import schema
 from zope.interface import implementer
 from plone.indexer.decorator import indexer
@@ -57,11 +59,13 @@ class IBenutzer(model.Schema):
 
     location = schema.TextLine(title=u"Dienstort oder Dienstsitz", required=False)
 
+    form.omitted(IEditForm, 'password')
     password = schema.TextLine(title=u'Passwort', 
                                description=u"Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe und eine Zahl müssen enthalten\
                                sein.", 
                                constraint=passwort_constraint, required=True)
 
+    form.omitted(IEditForm, 'password_repeat')
     password_repeat = schema.TextLine(title=u'Passwort wiederholen', required=True)
 
     biography = schema.Text(title=u'Vita des Benutzers', required=False)

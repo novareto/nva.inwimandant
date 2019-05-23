@@ -43,11 +43,6 @@
         </div>
 
         <div class="row">
-          <div class="col-xs-6 col-md-3"><strong>Passwort</strong></div>
-          <div class="col-xs-6 col-md-9"><span tal:content="view/get_password"></span></div>
-        </div>
-
-        <div class="row">
           <div class="col-xs-12 col-md-12"><strong>Biographie</strong></div>
           <div class="col-xs-12 col-md-12"><span tal:content="context/biography"></span></div>
         </div>
