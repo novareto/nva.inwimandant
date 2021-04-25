@@ -17,5 +17,5 @@ def possible_groups(context):
     terms = []
     for i in groups:
         if i.id not in 'AuthenticatedUsers':
-            terms.append(SimpleTerm(value=i.id, token=i.id, title=i.getGroupTitleOrName().decode('utf-8')))
+            terms.append(SimpleTerm(value=i.id, token=i.id, title=i.getGroupTitleOrName()))
     return SimpleVocabulary(terms)

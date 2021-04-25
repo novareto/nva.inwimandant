@@ -1,14 +1,19 @@
 # -*- coding:utf-8 -*-
-from nva.inwimandant.content.benutzer import IBenutzer
 from nva.inwimandant.interfaces import IChangePassword
-from uvc.api import api
+from z3c.form import button, form
+import plone.z3cform.layout
+from plone.autoform.form import AutoExtensibleForm
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile as FiveViewPageTemplateFile
 from plone import api as ploneapi
 
-api.templatedir('templates')
+class ChangePasswordForm(AutoExtensibleForm, form.Form):
 
-class ChangePasswordForm(api.Form):
-    api.context(IBenutzer)
-    fields = api.Fields(IChangePassword)
+    label = u"Änderung des Passwortes"
+    description = u""
+
+    ignoreContext = True
+    schema = IChangePassword
+    output = None
 
     def checkowner(self):
         userid = ploneapi.user.get_current().getId()
@@ -25,6 +30,7 @@ class ChangePasswordForm(api.Form):
         return False
 
     def update(self):
+        super(ChangePasswordForm, self).update()
         message = u"Sie haben keine Berechtigung zum Ändern des Kennwortes."
         if not self.checkowner():
             ploneapi.portal.show_message(message=message, request=self.request, type="error")
@@ -32,7 +38,7 @@ class ChangePasswordForm(api.Form):
             return self.redirect(url)
         self.formurl = self.context.absolute_url() + '/changepasswordform'
 
-    @api.action("Neues Password speichern")
+    @button.buttonAndHandler("Neues Password speichern")
     def save_password(self):
         data, errors = self.extractData()
         if errors:
@@ -45,7 +51,9 @@ class ChangePasswordForm(api.Form):
         url = ploneapi.portal.get().absolute_url()
         return self.redirect(url)
 
-    @api.action('Abbrechen')
+    @button.buttonAndHandler('Abbrechen')
     def handel_cancel(self):
         url = ploneapi.portal.get().absolute_url()
         return self.redirect(url)
+
+changepasswordform = plone.z3cform.layout.wrap_form(ChangePasswordForm, index=FiveViewPageTemplateFile("changepasswordform.pt"))    

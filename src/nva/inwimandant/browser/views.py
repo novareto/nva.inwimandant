@@ -4,15 +4,13 @@ from plone import api as ploneapi
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from nva.inwimandant.vocabularies import possible_groups
-from uvc.api import api
-
 
 class BenutzerOrdnerView(BrowserView):
     """View fuer den Benutzerordner"""
 
     def get_group(self):
         group = ploneapi.group.get(groupname=self.context.group)
-        return group.getGroupTitleOrName().decode('utf-8')
+        return group.getGroupTitleOrName()
 
     def get_userlist(self):
         fc = self.context.getFolderContents()
@@ -55,10 +53,9 @@ class BenutzerView(BrowserView):
         return ""
 
 
-class ManageChangePassword(api.View):
-    api.context(Interface)
+class ManageChangePassword(BrowserView):
 
-    def render(self):
+    def __call__(self):
         userid = ploneapi.user.get_current().getId()
         mandantuser = ploneapi.content.find(portal_type="Benutzer", mandant_userid=userid)
         if mandantuser:
@@ -67,10 +64,9 @@ class ManageChangePassword(api.View):
         return
 
 
-class IsMandantUser(api.View):
-    api.context(Interface)
+class IsMandantUser(BrowserView):
 
-    def render(self):
+    def __call__(self):
         userid = ploneapi.user.get_current().getId()
         mandantuser = ploneapi.content.find(portal_type="Benutzer", mandant_userid=userid)
         if mandantuser:
@@ -78,10 +74,9 @@ class IsMandantUser(api.View):
         return False
 
 
-class IsLocalUser(api.View):
-    api.context(Interface)
+class IsLocalUser(BrowserView):
 
-    def render(self):
+    def __call__(self):
         userid = ploneapi.user.get_current().getId()
         acl_users = getToolByName(self.context, 'acl_users')
         source_users = acl_users.get('source_users')
@@ -91,16 +86,12 @@ class IsLocalUser(api.View):
         return False
 
 
-class IsExternalLogin(api.View):
-    api.context(Interface)
+class IsExternalLogin(BrowserView):
 
-    def render(self):
-        if "https://inwi-rue.bghw.de" in self.request.getURL():
-            return True
-        return False
+    def __call__(self):
+        return True
 
-class IsMandantTest(api.View):
-    api.context(Interface)
+class IsMandantTest(BrowserView):
 
-    def render(self):
+    def __call__(self):
         import pdb;pdb.set_trace()

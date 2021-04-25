@@ -19,6 +19,13 @@
       />
 
   <browser:page
+      for="nva.inwimandant.content.benutzer.IBenutzer"
+      name="changepasswordform"
+      class=".forms.changepasswordform"
+      permission="zope.Public" />
+
+
+  <browser:page
       name="view"
       for="nva.inwimandant.content.benutzerordner.IBenutzerordner"
       class="nva.inwimandant.browser.views.BenutzerOrdnerView"

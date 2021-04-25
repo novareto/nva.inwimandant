@@ -4,12 +4,13 @@
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import InitializeClass
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from OFS.Cache import Cacheable
 from plone import api as ploneapi
 from zope.interface import implementer
 from nva.inwimandant.interfaces import IInwiMandantPlugin
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.interfaces import plugins as pas_interfaces
 import logging
+import os
 
 logger = logging.getLogger('event.InwiMandantPlugin')
 zmidir = os.path.join(os.path.dirname(__file__), "zmi")
@@ -34,7 +35,7 @@ manage_addInwiPluginForm = PageTemplateFile(
     pas_interfaces.IPropertiesPlugin,
     pas_interfaces.IUserEnumerationPlugin,
 )
-class InwiMandant(BasePlugin, Cacheable):
+class InwiMandant(BasePlugin):
     """Multi-plugin
     """
 
@@ -42,16 +43,10 @@ class InwiMandant(BasePlugin, Cacheable):
     security = ClassSecurityInfo()
     _dont_swallow_my_exceptions = True
 
-    manage_options = ( ( { 'label': 'Users',
-                           'action': 'manage_users', }
-                         ,
-                       )
-                     + BasePlugin.manage_options
-                     + Cacheable.manage_options
-                     )
+    manage_options = ({'label': 'Users', 'action': 'manage_users'},) + BasePlugin.manage_options
 
-    def __init__( self, id, title=None ):
-        self._setId( id )
+    def __init__(self, id, title=None):
+        self._setId(id)
         self.title = title
 
     security.declarePrivate('authenticateCredentials')
@@ -65,7 +60,7 @@ class InwiMandant(BasePlugin, Cacheable):
             return None
         logged = user[0].getObject()
         if logged.password == password:
-            return (login, login)
+             return (login, login)
         return None
 
     security.declarePrivate('getPropertiesForUser')
@@ -90,20 +85,15 @@ class InwiMandant(BasePlugin, Cacheable):
         return dict() 
         
     security.declarePrivate('enumerateUsers')
-    def enumerateUsers(self, id=None, login=None, exact_match=False,
-            sort_by=None, max_results=None, **kw):
-
+    def enumerateUsers(self, id=None, login=None, exact_match=False, sort_by=None, max_results=None, **kw):
         key = login or id
-
         mylist = []
         if key:
             users = ploneapi.content.find(portal_type='Benutzer', mandant_userid=key)
             for i in users:
-	        mylist.append({
-                               "id" : i.mandant_userid,
+                mylist.append({"id":i.mandant_userid,
                                "login" : i.mandant_userid,
-                               "pluginid" : self.getId(),
-                              })
+                               "pluginid" : self.getId(),})
         if kw.get('fullname'):
             users = ploneapi.content.find(portal_type='Benutzer', Title=kw.get('fullname'))
             for i in users:

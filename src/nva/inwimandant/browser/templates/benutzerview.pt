@@ -10,44 +10,65 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
-
+      <div class="container">
         <div class="row">
-          <div class="col-xs-8 col-md-8">
-            <h1 class="documentFirstHeading" tal:content="context/title" />
-          </div>
-          <div tal:condition="view/get_portrait" class="col-xs-4 col-md-4">
-            <img tal:attributes="src view/get_portrait">
+          <div class="col-12">
+            <div tal:replace="structure provider:plone.abovecontenttitle" />
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 col-lg-9">
+            <div class="row">
+	      <div class="col-8">
+                <h1 class="documentFirstHeading" tal:content="context/title" />
+                <div tal:replace="structure provider:plone.belowcontenttitle" />
+              </div>
+	      <div class="col-4">
+                <img tal:condition="view/get_portrait" tal:attributes="src view/get_portrait">
+              </div>
+	    </div>
+	    
+	    <p tal:condition="context/description | nothing" class="lead mt-5">
+              <img class="icon" src="++theme++plonetheme.siguv/icons/siguv/dot.svg">
+              <span tal:content="context/description"/>
+            </p>
 
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
+            <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <p class="documentDescription" tal:content="context/description" />
+            <div class="row">
+              <div class="col-6"><strong>Anmeldename</strong></div>
+              <div class="col-6"><span tal:content="context/user_id"></span></div>
+            </div>
 
-        <div tal:replace="structure provider:plone.abovecontentbody" />
+            <div class="row">
+              <div class="col-6"><strong>E-Mail-Adresse</strong></div>
+              <div class="col-6"><span tal:content="context/email"></span></div>
+            </div>
+
+            <div class="row">
+              <div class="col-6"><strong>Dienstort oder Dienstsitz</strong></div>
+              <div class="col-6"><span tal:content="context/location"></span></div>
+            </div>
+
+            <div class="row">
+              <div class="col-12"><strong>Biographie</strong></div>
+              <div class="col-12"><span tal:content="context/biography"></span></div>
+            </div>
+
+          </div><!--col-->
+          <div class="col-12 col-lg-3">
+            <div tal:replace="structure context/@@portlet-cards-view"/>
+          </div>
+
+        </div><!--row-->
 
         <div class="row">
-          <div class="col-xs-6 col-md-3"><strong>Anmeldename</strong></div>
-          <div class="col-xs-6 col-md-9"><span tal:content="context/user_id"></span></div>
-        </div>
+          <div class="col-12">
+            <div tal:replace="structure provider:plone.belowcontentbody" />
+          </div>
+        </div><!--row-->
 
-        <div class="row">
-          <div class="col-xs-6 col-md-3"><strong>E-Mail-Adresse</strong></div>
-          <div class="col-xs-6 col-md-9"><span tal:content="context/email"></span></div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-6 col-md-3"><strong>Dienstort oder Dienstsitz</strong></div>
-          <div class="col-xs-6 col-md-9"><span tal:content="context/location"></span></div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-md-12"><strong>Biographie</strong></div>
-          <div class="col-xs-12 col-md-12"><span tal:content="context/biography"></span></div>
-        </div>
-
-        <div tal:replace="structure provider:plone.belowcontentbody" />
+      </div><!--container-->
 
     </tal:main-macro>
 </metal:main>

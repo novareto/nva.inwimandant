@@ -10,43 +10,62 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div tal:replace="structure provider:plone.abovecontenttitle" />
+          </div>
+	</div>
+        <div class="row">
+	   <div class="col-12 col-lg-9">
 
         <h1 class="documentFirstHeading" tal:content="context/title" />
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription" tal:content="context/description" />
+        <p tal:condition="context/description | nothing" class="lead mt-5">
+            <img class="icon" src="++theme++plonetheme.siguv/icons/siguv/dot.svg">
+            <span tal:content="context/description"/>
+        </p>
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <div class="row">
-          <div class="col-xs-12 col-md-12">
-            <h4>Benutzer für Gruppe: <span tal:content="view/get_group"/></h4>
-          </div>
-        </div>
-
+        <h3>Benutzer für Gruppe: <span tal:content="view/get_group"/></h3>
+        
         <div tal:define="myuserlist view/get_userlist">
           <div class="row">
-            <div class="col-xs-4 col-md-4"><strong>Benutzer</strong></div>
-            <div class="col-xs-4 col-md-4"><strong>Anmeldename</strong></div>
-            <div class="col-xs-4 col-md-4"></div>
+            <div class="col-4 col-md-4"><strong>Benutzer</strong></div>
+            <div class="col-4 col-md-4"><strong>Anmeldename</strong></div>
+            <div class="col-4 col-md-4"></div>
           </div>
           <hr>
           <div class="row" tal:repeat="user myuserlist">
-            <div class="col-xs-4 col-md-4">
+            <div class="col-4 col-md-4">
               <a href="" tal:attributes="href user/url" tal:content="user/titel"/>
             </div>
-            <div class="col-xs-4 col-md-4">
+            <div class="col-4 col-md-4">
               <p tal:content="user/username"/>
             </div>
-            <div class="col-xs-4 col-md-4">
+            <div class="col-4 col-md-4">
               <a tal:condition="user/changelink" tal:attributes="href user/changelink">neues Passwort</a>
             </div>
           </div>
         </div>
 
-        <div tal:replace="structure provider:plone.belowcontentbody" />
+	   </div><!--col-->
+           <div class="col-12 col-lg-3">
+             <div tal:replace="structure context/@@portlet-cards-view"/>
+           </div>
+
+	</div><!--row-->
+
+	<div class="row">
+          <div class="col-12">
+            <div tal:replace="structure provider:plone.belowcontentbody" />
+          </div>
+	</div><!--row-->
+
+      </div><!--container-->
 
     </tal:main-macro>
 </metal:main>
