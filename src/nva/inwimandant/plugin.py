@@ -65,7 +65,11 @@ class InwiMandant(BasePlugin, Cacheable):
     def getPropertiesForUser(self, user, request=None):
         if user:
             userid = user.getUserId()
-            userbrains = ploneapi.content.find(portal_type='Benutzer', mandant_userid=userid)
+            try:
+                userbrains = ploneapi.content.find(portal_type='Benutzer', mandant_userid=userid)
+            except:
+                print('Error in encoding')
+                userbrains = []
             if userbrains:
                 logged = userbrains[0].getObject()
                 mydict = {}
