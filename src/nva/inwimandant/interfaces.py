@@ -7,15 +7,11 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.interface import invariant
 from zope import schema
 
+class IInwiMandantPlugin(Interface):
+    """Marker Interface"""
 
 class INvaInwimandantLayer(IDefaultBrowserLayer):
     """Marker interface that defines a browser layer."""
-
-class IInwiMandant(interfaces.plugins.IAuthenticationPlugin,
-                   interfaces.plugins.IPropertiesPlugin,
-                   interfaces.plugins.IGroupsPlugin,
-                   interfaces.plugins.IUserEnumerationPlugin):
-    """interface for InwiGroupHelper."""
 
 class IChangePassword(Interface):
     """Form Fields for Change Password Form"""

@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Init and utils."""
-import install
+from AccessControl.Permissions import add_user_folders
+from nva.inwimandant.plugin import InwiMandant
+from nva.inwimandant.plugin import manage_addInwiPlugin
+from nva.inwimandant.plugin import manage_addInwiPluginForm
+from nva.inwimandant.plugin import zmidir
+from Products.PluggableAuthService import registerMultiPlugin
 from zope.i18nmessageid import MessageFactory
+
+import os
 
 _ = MessageFactory('nva.inwimandant')
 
-install.register_inwimandant_plugin()
-
 def initialize(context):
-    """Initializer called when used as a Zope 2 product."""
-    install.register_inwimandant_plugin_class(context)
+    registerMultiPlugin(InwiMandant.meta_type)
+    context.registerClass(
+        InwiMandant,
+        permission=add_user_folders,
+        icon=os.path.join(zmidir, "inwi_user.png"),
+        constructors=(manage_addInwiPluginForm, manage_addInwiPlugin),
+        visibility=None,
+    )

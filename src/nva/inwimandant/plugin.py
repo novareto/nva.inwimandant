@@ -2,25 +2,38 @@
 # Copyright (c) 2007-2019 NovaReto GmbH
 # lwalther@novareto.de
 from AccessControl.SecurityInfo import ClassSecurityInfo
-from App.class_init import default__class_init__ as InitializeClass
+from App.class_init import InitializeClass
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
-from OFS.Folder import Folder
 from OFS.Cache import Cacheable
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin, IUserEnumerationPlugin, IGroupsPlugin
-
-import interfaces
-
-from base64 import encodestring, decodestring
-from urllib import quote, unquote
 from plone import api as ploneapi
-
+from zope.interface import implementer
+from nva.inwimandant.interfaces import IInwiMandantPlugin
+from Products.PluggableAuthService.interfaces import plugins as pas_interfaces
 import logging
 
 logger = logging.getLogger('event.InwiMandantPlugin')
+zmidir = os.path.join(os.path.dirname(__file__), "zmi")
+
+def manage_addInwiPlugin(dispatcher, id, title="", RESPONSE=None, **kw):
+    """Create an instance of a Inwi Plugin.
+    """
+    inwiplugin = InwiMandant(id, title, **kw)
+    dispatcher._setObject(inwiplugin.getId(), inwiplugin)
+    if RESPONSE is not None:
+        RESPONSE.redirect("manage_workspace")
 
 
+manage_addInwiPluginForm = PageTemplateFile(
+    os.path.join(zmidir, "add_plugin.pt"), globals(), __name__="addInwiPlugin"
+)
+
+@implementer(
+    IInwiMandantPlugin,
+    pas_interfaces.IAuthenticationPlugin,
+    pas_interfaces.IGroupsPlugin,
+    pas_interfaces.IPropertiesPlugin,
+    pas_interfaces.IUserEnumerationPlugin,
+)
 class InwiMandant(BasePlugin, Cacheable):
     """Multi-plugin
     """
@@ -54,12 +67,6 @@ class InwiMandant(BasePlugin, Cacheable):
         if logged.password == password:
             return (login, login)
         return None
-
-#    security.declarePrivate('getRolesForPrincipal')
-#    def getRolesForPrincipal( self, principal, request=None ):
-#        if not request:
-#            return ()
-#        return ['Member',]
 
     security.declarePrivate('getPropertiesForUser')
     def getPropertiesForUser(self, user, request=None):
@@ -134,9 +141,4 @@ class InwiMandant(BasePlugin, Cacheable):
                 return ()
         return ()
             
-#    def extractCredentials(self, request):
-#        return 
-
-classImplements(InwiMandant, interfaces.IInwiMandant)
 InitializeClass(InwiMandant)
-
