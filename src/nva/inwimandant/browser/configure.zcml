@@ -26,8 +26,14 @@
 
   <browser:page
       for="*"
-      name="mypassword"
-      class=".forms.changeownpasswordform"
+      name="managechangepassword"
+      class=".views.ManageChangePassword"
+      permission="zope.Public" />
+
+  <browser:page
+      for="*"
+      name="ismandantuser"
+      class=".views.IsMandantUser"
       permission="zope.Public" />
 
   <browser:page

@@ -4,7 +4,7 @@ from zope.interface import Interface
 from nva.inwimandant.content.benutzer import passwort_constraint
 from Products.PluggableAuthService import interfaces
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.interface import invariant
+from zope.interface import invariant, Invalid
 from zope import schema
 
 class IInwiMandantPlugin(Interface):

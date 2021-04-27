@@ -5,6 +5,16 @@ from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from nva.inwimandant.vocabularies import possible_groups
 
+mailbody = """\
+Guten Tag %s,
+
+Ihnen wurde ein Zugang zum Portal https://dsm.siguv.de eingerichtet.
+
+Benutzername:%s
+Passwort:%s
+
+Bitte ändern Sie das Passwort nach Ihrer ersten Anmeldung."""
+
 class BenutzerOrdnerView(BrowserView):
     """View fuer den Benutzerordner"""
 
@@ -13,16 +23,30 @@ class BenutzerOrdnerView(BrowserView):
         return group.getGroupTitleOrName()
 
     def get_userlist(self):
-        fc = self.context.getFolderContents()
+        fc = self.context.listFolderContents()
         userlist = []
         for i in fc:
             entry = {}
-            entry['titel'] = i.Title
-            entry['username'] = i.mandant_userid
-            entry['url'] = i.getURL()
-            entry['changelink'] = self.changelink(i.getURL())
+            entry['titel'] = i.title
+            entry['username'] = i.user_id
+            entry['url'] = i.absolute_url()
+            entry['changelink'] = self.changelink(i.absolute_url())
+            entry['mailto'] = self.get_mailto(i)
             userlist.append(entry)
         return userlist
+
+    def get_mailto(self, user):
+        mailbody = """\
+Guten Tag %s,
+
+Ihnen wurde ein Zugang zum Portal https://dsm.siguv.de eingerichtet.
+
+Benutzer: %s
+Passwort: %s
+
+Bitte ändern Sie das Passwort nach Ihrer ersten Anmeldung.""" % (user.title, user.user_id, user.password)
+        mailtolink = "mailto:%s?subject=Zugang zum Portal Datenschutzmanagement&body=%s" % (user.email, mailbody)
+        return mailtolink
 
     def changelink(self, entryurl):
         link = ''
@@ -60,7 +84,7 @@ class ManageChangePassword(BrowserView):
         mandantuser = ploneapi.content.find(portal_type="Benutzer", mandant_userid=userid)
         if mandantuser:
             url = mandantuser[0].getURL() + '/@@changepasswordform'
-            return self.redirect(url)
+            return self.request.response.redirect(url)
         return
 
 
