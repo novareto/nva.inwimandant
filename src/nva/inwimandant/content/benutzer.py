@@ -29,6 +29,10 @@ def raiseUserErrorIfDouble(obj, event):
     obj.user_id = newid
     return
 
+def setLocalRoles(obj, event):
+    obj.manage_addLocalRoles(obj.user_id, (u'Editor', u'Owner'))
+    print(obj.get_local_roles())
+
 
 def passwort_constraint(value):
     """Check if Passwort passt zur Passwort-Policy"""

@@ -39,7 +39,7 @@ class ChangePasswordForm(AutoExtensibleForm, form.Form):
         self.formurl = self.context.absolute_url() + '/changepasswordform'
 
     @button.buttonAndHandler("Neues Password speichern")
-    def save_password(self):
+    def save_password(self, action):
         data, errors = self.extractData()
         if errors:
             ploneapi.portal.show_message(message='Bitte korrigieren Sie die angezeigten Fehler.',
@@ -49,11 +49,49 @@ class ChangePasswordForm(AutoExtensibleForm, form.Form):
         self.context.password = data.get('password')
         ploneapi.portal.show_message(message=message, request=self.request, type="info")
         url = ploneapi.portal.get().absolute_url()
-        return self.redirect(url)
+        return self.request.response.redirect(url)
 
     @button.buttonAndHandler('Abbrechen')
-    def handel_cancel(self):
+    def handel_cancel(self, action):
         url = ploneapi.portal.get().absolute_url()
         return self.redirect(url)
 
+
+class ChangeOwnPasswordForm(ChangePasswordForm):
+
+    def update(self):
+        super(ChangePasswordForm, self).update()
+        message = u"Fehler beim Ändern des Kennwortes."
+        current = ploneapi.user.get_current()
+        userid = current.getId()
+        userbrains = ploneapi.content.find(portal_type='Benutzer', mandant_userid=userid)
+        if userbrains:
+            self.userobj = userbrains[0].getObject()
+            self.formurl = self.userobj.absolute_url() + '/changepasswordform'
+        else:
+            ploneapi.portal.show_message(message=message, request=self.request, type="error")
+            url = ploneapi.portal.get().absolute_url()
+            return self.redirect(url)
+
+    @button.buttonAndHandler("Neues Password speichern")
+    def save_password(self, action):
+        data, errors = self.extractData()
+        if errors:
+            ploneapi.portal.show_message(message='Bitte korrigieren Sie die angezeigten Fehler.',
+                                        request=self.request, type="error")
+            return
+        current = ploneapi.user.get_current()
+        userid = current.getId()
+        userbrains = ploneapi.content.find(portal_type='Benutzer', mandant_userid=userid)
+        if userbrains:
+            message = u"Ihr Passwort wurde erfolgreich geändert."
+            self.userobj = userbrains[0].getObject()
+            self.userobj.password = data.get('password')
+        else:
+            message = u"Beim Ändern des Passworts ist ein Fehler aufgetreten."
+        ploneapi.portal.show_message(message=message, request=self.request, type="info")
+        url = ploneapi.portal.get().absolute_url()
+        return self.request.response.redirect(url)
+
 changepasswordform = plone.z3cform.layout.wrap_form(ChangePasswordForm, index=FiveViewPageTemplateFile("changepasswordform.pt"))    
+changeownpasswordform = plone.z3cform.layout.wrap_form(ChangeOwnPasswordForm, index=FiveViewPageTemplateFile("changepasswordform.pt"))    

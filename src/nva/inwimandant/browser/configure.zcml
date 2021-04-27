@@ -24,6 +24,11 @@
       class=".forms.changepasswordform"
       permission="zope.Public" />
 
+  <browser:page
+      for="*"
+      name="mypassword"
+      class=".forms.changeownpasswordform"
+      permission="zope.Public" />
 
   <browser:page
       name="view"

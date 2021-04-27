@@ -55,6 +55,12 @@
     handler="nva.inwimandant.content.benutzer.raiseUserErrorIfDouble"
   />
 
+  <subscriber
+    for="nva.inwimandant.content.benutzer.IBenutzer
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
+  handler="nva.inwimandant.content.benutzer.setLocalRoles"
+  />
+
   <!--<adapter factory="nva.inwimandant.content.benutzer.UserValidator" />-->
 
 </configure>
