@@ -37,6 +37,12 @@
       permission="zope.Public" />
 
   <browser:page
+      for="*"
+      name="ismandanttest"
+      class=".views.IsMandantTest"
+      permission="zope.Public" />
+
+  <browser:page
       name="view"
       for="nva.inwimandant.content.benutzerordner.IBenutzerordner"
       class="nva.inwimandant.browser.views.BenutzerOrdnerView"

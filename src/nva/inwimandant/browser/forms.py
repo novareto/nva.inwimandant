@@ -35,7 +35,7 @@ class ChangePasswordForm(AutoExtensibleForm, form.Form):
         if not self.checkowner():
             ploneapi.portal.show_message(message=message, request=self.request, type="error")
             url = ploneapi.portal.get().absolute_url()
-            return self.redirect(url)
+            return self.request.response.redirect(url)
         self.formurl = self.context.absolute_url() + '/changepasswordform'
 
     @button.buttonAndHandler("Neues Password speichern")
@@ -54,6 +54,6 @@ class ChangePasswordForm(AutoExtensibleForm, form.Form):
     @button.buttonAndHandler('Abbrechen')
     def handel_cancel(self, action):
         url = ploneapi.portal.get().absolute_url()
-        return self.redirect(url)
+        return self.request.response.redirect(url)
 
 changepasswordform = plone.z3cform.layout.wrap_form(ChangePasswordForm, index=FiveViewPageTemplateFile("changepasswordform.pt"))    

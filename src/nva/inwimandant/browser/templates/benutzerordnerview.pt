@@ -35,23 +35,23 @@
         <div tal:define="myuserlist view/get_userlist">
           <div class="row">
             <div class="col-3"><strong>Benutzer</strong></div>
-            <div class="col-3"><strong>Anmeldename</strong></div>
-            <div class="col-3"></div>
-            <div class="col-3"></div>
+            <div class="col-5"><strong>Anmeldename</strong></div>
+            <div class="col-2"></div>
+            <div class="col-2"></div>
           </div>
           <hr>
           <div class="row" tal:repeat="user myuserlist">
             <div class="col-3">
               <a href="" tal:attributes="href user/url" tal:content="user/titel"/>
             </div>
-            <div class="col-3">
+            <div class="col-5">
               <p tal:content="user/username"/>
             </div>
-            <div class="col-3">
-              <a tal:condition="user/changelink" tal:attributes="href user/changelink">neues Passwort</a>
+            <div class="col-2">
+              <a tal:condition="user/changelink" tal:attributes="href user/changelink">Passwort</a>
             </div>
-            <div class="col-3">
-              <a tal:condition="user/changelink" tal:attributes="href user/mailto">E-Mail senden</a>
+            <div class="col-2">
+              <a tal:condition="user/changelink" tal:attributes="href user/mailto">E-Mail</a>
             </div>
           </div>
         </div>
