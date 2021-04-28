@@ -13,6 +13,7 @@ from plone import api as ploneapi
 from zope.interface import Invalid
 from zope.interface import invariant
 from z3c.form import validator
+from nva.inwimandant.passwordgen import gen_password
 
 # from nva.inwimandant import _
 
@@ -69,20 +70,21 @@ class IBenutzer(model.Schema):
     directives.omitted(IEditForm, 'password')
     password = schema.TextLine(title=u'Passwort', 
                                description=u"Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe und eine Zahl müssen enthalten\
-                               sein.", 
+                               sein.",
+                               defaultFactory = gen_password,
                                constraint=passwort_constraint, required=True)
 
-    directives.omitted(IEditForm, 'password_repeat')
-    password_repeat = schema.TextLine(title=u'Passwort wiederholen', required=True)
+    #directives.omitted(IEditForm, 'password_repeat')
+    #password_repeat = schema.TextLine(title=u'Passwort wiederholen', required=True)
 
     biography = schema.Text(title=u'Vita des Benutzers', required=False)
 
     portrait = NamedBlobImage(title=u'Porträtbild', required=False)
 
-    @invariant
-    def password_invariant(data):
-        if data.password != data.password_repeat:
-            raise Invalid(u"Die eingegebenen Passworte stimmen leider nicht überein.")
+    #@invariant
+    #def password_invariant(data):
+    #    if data.password != data.password_repeat:
+    #        raise Invalid(u"Die eingegebenen Passworte stimmen leider nicht überein.")
 
 
 @implementer(IBenutzer)
